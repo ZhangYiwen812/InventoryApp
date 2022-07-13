@@ -174,17 +174,27 @@ class UserDBController extends Controller
     public function destroyUserdata(Request $request){
         $myinfo = User::find($request->phonenumber);
         if($request->cookie('phonenumber')==$myinfo->phonenumber && $request->cookie('password')==$myinfo->password){
+            // 所有子账号恢复自管理  mysql语句是否可以实现
+            $users = User::where('adminphone',$request->phonenumber)
+                            ->select('phonenumber')
+                            ->get()->toArray();
+            DebugBar::log($users);
+            foreach($users as $value){
+                $user = User::find($value['phonenumber']);
+                $user->update(['adminphone' => $value['phonenumber']]);
+            }
             //删除商品数据
             Schema::dropIfExists('commodity'.$request->phonenumber);
-            // 所有子账号恢复自管理  mysql语句是否可以实现
-            $users = User::where('adminphone','=',$request->phonenumber)->get();
-            foreach($users as $value){
-                $user = User::find($value->phonenumber);
-                $user->update([
-                    'adminphone' => $value->phonenumber
-                ]);
+            //删除盘点表及盘点订单
+            $orderids=DB::table('order')
+                        ->select('orderid')
+                        ->orderBy('orderid', 'asc')
+                        ->distinct()->get()->toArray();
+            foreach($orderids as $orderid){
+                Schema::dropIfExists('stock'.$orderid->orderid);
             }
-            //
+            $orders=DB::table('order')->where('sendphonenumber',$request->phonenumber);
+            $orders->delete();
             // 删除账号
             $myinfo->delete();
             return response()->json(['destroy'=>1]);
@@ -195,17 +205,26 @@ class UserDBController extends Controller
     public function resetUserdata(Request $request){
         $myinfo = User::find($request->get('phonenumber'));
         if($request->cookie('phonenumber')==$myinfo->phonenumber && $request->cookie('password')==$myinfo->password){
+            // 所有子账号恢复自管理  mysql语句是否可以实现
+            $users = User::where('adminphone',$request->phonenumber)
+                            ->select('phonenumber')
+                            ->get()->toArray();
+            foreach($users as $value){
+                $user = User::find($value['phonenumber']);
+                $user->update(['adminphone' => $value['phonenumber']]);
+            }
             //删除商品数据
             Schema::dropIfExists('commodity'.$request->phonenumber);
-            // 所有子账号恢复自管理  mysql语句是否可以实现
-            $users = User::where('adminphone','=',$request->phonenumber)->get();
-            foreach($users as $value){
-                $user = User::find($value->phonenumber);
-                $user->update([
-                    'adminphone' => $value->phonenumber
-                ]);
+            //删除盘点表及盘点订单
+            $orderids=DB::table('order')
+                        ->select('orderid')
+                        ->orderBy('orderid', 'asc')
+                        ->distinct()->get()->toArray();
+            foreach($orderids as $orderid){
+                Schema::dropIfExists('stock'.$orderid->orderid);
             }
-            //
+            $orders=DB::table('order')->where('sendphonenumber',$request->phonenumber);
+            $orders->delete();
             // 复位账号
             $myinfo->adminphone=$request->get('phonenumber');
             $myinfo->save();
