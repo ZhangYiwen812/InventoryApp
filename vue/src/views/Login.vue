@@ -21,7 +21,6 @@
         </el-form-item>
     </el-form>
 
-    <!-- <input type="hidden" name="_token" v-bind:value="csrftoken"/><br> -->
     <el-dialog title="温馨提示" v-model="dialogVisible" width="30%">
         <span>{{dialogtext}}</span><br>
         <span v-show="textVisible">手机号11位字符，姓名不大于10位字符，<br>密码不小于8位字符且不大于20位字符。<br></span><br>
@@ -70,10 +69,12 @@
       /**************************  验证后登陆  **************************/
       onVerifyCaptchtoLogin(){
         let that = this;
-        axios.post("/api/api/verif_captcha",
+        axios.get("/api/api/verif_captcha",
         {
-          captcha: this.form.captcha,
-          key: this.form.key,
+          params:{
+            captcha: that.form.captcha,
+            key: that.form.key,
+          }
         }).then(function(response){
               if(response.data.verif==1){
                 that.onLogin();
@@ -88,35 +89,39 @@
       },
       /**************************  登陆账号  **************************/
       onLogin() {
+        console.log(this.form.phonenumber);
+        console.log(this.form.password);
         let that = this;
-        axios.post("/api/api/verif_login",
+        axios.get("/api/api/verif_login",
         {
-          phonenumber: this.form.phonenumber,
-          password: this.form.password,
+          params:{
+            phonenumber: that.form.phonenumber,
+            password: that.form.password
+          }
         }).then(function(response){
-              if(response.data.verif==-1){
-                // 表单输入不合法
-                if(that.form.phonenumber!="" && that.form.password!="") {
-                  that.dialogtext = '手机号或密码不合法！';
-                  that.textVisible = true;
-                  that.dialogVisible = true;
-                } else {
-                  that.dialogtext = '请输入手机号和密码！';
-                  that.textVisible = false;
-                  that.dialogVisible = true;
-                }
-              }else if(response.data.verif==0){
-                that.dialogtext = '该账号未注册！';
+            if(response.data.verif==-1){
+              // 表单输入不合法
+              if(that.form.phonenumber!="" && that.form.password!="") {
+                that.dialogtext = '手机号或密码不合法！';
+                that.textVisible = true;
+                that.dialogVisible = true;
+              } else {
+                that.dialogtext = '请输入手机号和密码！';
                 that.textVisible = false;
                 that.dialogVisible = true;
-              }else if(response.data.verif==1){
-                that.dialogtext = '密码错误！';
-                that.textVisible = false;
-                that.dialogVisible = true;
-              }else if(response.data.verif==2){
-                sessionStorage.setItem('loginstate','ok')
-                that.$router.push("/main/"+that.form.phonenumber);
               }
+            }else if(response.data.verif==0){
+              that.dialogtext = '该账号未注册！';
+              that.textVisible = false;
+              that.dialogVisible = true;
+            }else if(response.data.verif==1){
+              that.dialogtext = '密码错误！';
+              that.textVisible = false;
+              that.dialogVisible = true;
+            }else if(response.data.verif==2){
+              sessionStorage.setItem('loginstate','ok')
+              that.$router.push("/main/"+that.form.phonenumber);
+            }
           },function(err){console.log("登录错误！");}
         );
       },

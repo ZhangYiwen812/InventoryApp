@@ -290,11 +290,13 @@
       /**********  根据手机号、搜索子串、分页数量、页码获取商品列表  ***********/
       getData(){
         let that = this;
-        axios.post('/api/api/commoditydb/get_search_page_commoditydata',{
-          phonenumber: that.phonenumber,
-          searchtext: that.searchtext,
-          pageSize: that.pageSize,
-          currentPage: that.currentPage,
+        axios.get('/api/api/commoditydb/get_search_page_commoditydata',{
+          params:{
+            phonenumber: that.phonenumber,
+            searchtext: that.searchtext,
+            pageSize: that.pageSize,
+            currentPage: that.currentPage,
+          }
         }).then(function(response) {
           if(response.data.getdata==1 || response.data.getdata==2){
             console.log('获取数据成功');
@@ -340,17 +342,15 @@
           this.insertUpdataDgVisible=true
         }
       },
-      /**********************  执行添加或修改商品  ****************************/
+      /**********************  执行添加或修改商品  ***************************/
       handleInsertUpdata(){
         if(this.insertUpdataDgModel){
-          console.log('handleUpdata');
           this.handleUpdata();
         }else{
-          console.log('handleInsert');
           this.handleInsert();
         }
       },
-      /********************* 添加商品信息 添加更新对话框 ***********************/
+      /********************* 添加商品信息 添加更新对话框 **********************/
       handleInsert(){
         let that = this;
         axios.post('/api/api/commoditydb/insert_commoditydata',{
@@ -422,7 +422,7 @@
           }
         },function(err){console.log('添加商品错误！');});
       },
-      /******************* 更新商品信息 添加更新对话框 *************************/
+      /******************* 更新商品信息 添加更新对话框 ************************/
       handleUpdata(){
         let that = this;
         axios.post('/api/api/commoditydb/update_commoditydata',{
@@ -461,11 +461,11 @@
           }
         },function(err){console.log('添加商品错误！');});
       },
-      /***********************  选择需要删除的商品  ***************************/
+      /**********************  选择需要删除的商品  ***************************/
       selectionChange(selection){
         this.delCommodityids=selection;
       },
-      /*************************  删除所选商品  ******************************/
+      /***********************  删除所选商品  ********************************/
       handleSelectionDelete(){
         if(this.delCommodityids.length==0){
           this.selectionDialogVisible=false;
@@ -497,7 +497,7 @@
           },function(err){console.log('删除所选商品错误！');});
         }
       },
-      /************************  清除所有商品  ******************************/
+      /***********************  清除所有商品  ********************************/
       handleAllDelete(){
         let that = this;
         axios.post('/api/api/commoditydb/del_all_commoditydata',{
@@ -526,7 +526,7 @@
         this.formData.append('phonenumber',this.phonenumber);
         this.formData.append('addCommoditysfile',files)
       },
-      /*******************  Excel批量添加商品数据  ****************************/
+      /**************  Excel批量添加商品数据 使用post传数组  *******************/
       updataExcel() {
         let that = this;
         axios.post('/api/api/commoditydb/insert_excel_all_commoditydata',
@@ -640,10 +640,11 @@
 .title {
   font-size: 18px;
   line-height: 35px;
-  text-align: center;
+  text-align: left;
   width: 801px;
   height: 35px;
   margin: 0px 0px 15px 0px;
+  border-bottom: 1px solid var(--el-color-primary-light-3);
 }
 .editlist {
   float: left;

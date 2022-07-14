@@ -10,6 +10,23 @@
         <template #header>
           <div class="card-header">
             <span>盘点编号：{{carditem.orderid}}</span>
+
+            <el-dropdown>
+              <span>
+                <el-icon style="padding-top:3px">
+                  <arrow-down />
+                </el-icon>
+              </span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="openDelDialog(carditem.orderid,true)">
+                    强制删除
+                  </el-dropdown-item>
+                  <!-- <el-dropdown-item></el-dropdown-item> -->
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+
             <el-button class="cardbutton" type="primary" @click="toOrderinfo(carditem.orderid)">订单详情</el-button>
           </div>
         </template>
@@ -32,7 +49,7 @@
             <!-- 订单已完成 4 -->
             <Finished v-if="carditem.state==4"/>
           </el-icon>
-          <el-button class="delbtn" type="danger" @click="openDelDialog(carditem.orderid)"><el-icon><Delete/></el-icon></el-button>
+          <el-button class="delbtn" type="danger" @click="openDelDialog(carditem.orderid,false)"><el-icon><Delete/></el-icon></el-button>
         </div>
       </el-card>
     </div>
@@ -65,11 +82,13 @@
     </el-dialog>
 
     <el-dialog title="温馨提示" v-model="delDialogVisible" width="380px">
-        <span>您要删除这个订单吗？</span><br>
-        <br><br>
+        <span v-if="!Manddelmode">您要删除这个订单吗？</span>
+        <span v-if="Manddelmode" style="color:red">您要强制删除这个订单吗？</span>
+        <br><br><br>
         <span class="dialog-footer">
           <el-button type="primary" @click="delDialogVisible=false">取 消</el-button>
-          <el-button type="" @click="deleteOrder()">确 认</el-button>
+          <el-button v-if="!Manddelmode" @click="deleteOrder()">确 认</el-button>
+          <el-button v-if="Manddelmode" @click="delOrderMandatoryCode()">确 认</el-button>
         </span>
     </el-dialog>
     
@@ -79,7 +98,6 @@
 <script>
   import axios from '../../http';
   import { ElMessage } from 'element-plus';
-  import {Check,Delete,Edit,Message,Search,Star} from '@element-plus/icons-vue';
 
   export default {
     name: 'Inventoryorder',
@@ -95,6 +113,7 @@
         delorderid: '',
         // 对话框显示
         newOrderdialogVisible: false,
+        Manddelmode: false, // false普通删除，true强制删除
         delDialogVisible: false,
       }
     },
@@ -106,8 +125,10 @@
       /***************************  获取订单列表  *******************************/
       getData(){
         let that = this;
-        axios.post('/api/api/orderdb/get_order_list',{
-          sendphonenumber: that.phonenumber,
+        axios.get('/api/api/orderdb/get_order_list',{
+          params:{
+            sendphonenumber: that.phonenumber
+          }
         }).then(function(response) {
           if(response.data.get==1){
             console.log(response);
@@ -133,8 +154,10 @@
       /************************  打开创建订单的对话框  ***************************/
       openCreateOrderDialog() {
         let that = this;
-        axios.post('/api/api/userdb/get_only_admin_phonedata_totransfer',{
-          phonenumber: that.phonenumber,
+        axios.get('/api/api/userdb/get_only_admin_phonedata_totransfer',{
+          params:{
+            phonenumber: that.phonenumber
+          }
         }).then(function(response) {
           if(response.data.get==1){
             console.log(response.data.data);
@@ -153,7 +176,7 @@
       },
       /**************************  穿梭框改变方法  ******************************/
       transferChange(){
-        console.log('进入transferChange:'+this.rightValue);
+        // console.log('进入transferChange:'+this.rightValue);
       },
       /****************************  新建订单  **********************************/
       createOrder(){
@@ -193,8 +216,9 @@
         this.$router.push("/user/orderinfo/"+this.phonenumber+'/'+orderid);
       },
       /***********************  打开删除订单对话框  ******************************/
-      openDelDialog(orderid){
+      openDelDialog(orderid,Manddelmode){
         this.delorderid=orderid;
+        this.Manddelmode=Manddelmode;
         this.delDialogVisible=true;
       },
       /***************************  删除订单  ***********************************/
@@ -229,6 +253,29 @@
           }
         },function(err){console.log('删除订单错误！');});
       },
+      /*************************  强制删除订单  ***********************************/
+      delOrderMandatoryCode(){
+        let that = this;
+        axios.post('/api/api/orderdb/del_order_mandatory_code',{
+          phonenumber: that.phonenumber,
+          orderid: that.delorderid
+        }).then(function(response) {
+          if(response.data.del==1){
+            that.delorderid='';
+            that.delDialogVisible=false;
+            ElMessage({
+              showClose: true,
+              message: '强制删除订单成功',
+              type: 'success',
+            });
+            that.getData();
+            console.log('强制删除订单成功');
+          }else if(response.data.del==0){
+            console.log('强制删除订单失败！');
+            that.loginfail();
+          }
+        },function(err){console.log('强制删除订单错误！');});
+      },
       /***************************  登录失效  ***********************************/
       loginfail(){
         console.log('登录失效！');
@@ -245,10 +292,11 @@
 .title {
   font-size: 18px;
   line-height: 35px;
-  text-align: center;
+  text-align: left;
   width: 801px;
   height: 35px;
   margin: 0px 0px 15px 0px;
+  border-bottom: 1px solid var(--el-color-primary-light-3);
 }
 .editlist {
   float: left;

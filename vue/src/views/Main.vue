@@ -113,7 +113,11 @@
       /********************  进入页面确认是否是管理用户  ************************/
       isAdminUser(){
         let that = this;
-        axios.post("/api/api/userdb/get_is_admin_user",{phonenumber: that.phonenumber})
+        axios.get("/api/api/userdb/get_is_admin_user",{
+          params:{
+            phonenumber: that.phonenumber
+          }
+        })
         .then(function(response){
           if(response.data.is==2){
             console.log('用户是管理用户');

@@ -81,8 +81,11 @@
     mounted: function(){
       /**************************  进入页面获取用户数据  ****************************/
       let that = this;
-      axios.post("/api/api/userdb/get_only_userdata",{
-        phonenumber: that.phonenumber})
+      axios.get("/api/api/userdb/get_only_userdata",{
+        params:{
+          phonenumber: that.phonenumber
+        }
+      })
       .then(function(response){
         if(response.data.getdata==1){
           console.log(response);

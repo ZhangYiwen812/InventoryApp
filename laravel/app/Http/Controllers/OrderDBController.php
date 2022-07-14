@@ -215,30 +215,28 @@ class OrderDBController extends Controller
     }
     /*****************************  删除订单  *********************************/
     public function delOrder(Request $request){
-        // DebugBar::log($request->phonenumber.' '.$request->orderid);
         $orderidhasphone = $request->orderid.$request->phonenumber;
         $myinfo = User::find($request->phonenumber);
         if($request->cookie('phonenumber')==$myinfo->phonenumber && $request->cookie('password')==$myinfo->password){
+            // 检查订单状态 必须都是状态3(订单完成，已求和)，才能删除
             $hasSomeStates = DB::table('order')
                             ->where('orderid',$orderidhasphone)
                             ->whereIn('state',[0,1,2])->count();
-            // DebugBar::log($orderidhasphone);
-            // DebugBar::log($hasSomeStates);
+            // 验证所有盘点表是否都是状态3
             if($hasSomeStates==0){
                 $orderiddb=DB::table('order')->where('orderid',$orderidhasphone);
                 $orderiddb->delete();
                 Schema::dropIfExists('stock'.$orderidhasphone);
-                return response()->json(['del'=>2]);
+                return response()->json(['del'=>2]); // 2-所有盘点表都是状态3
             }else{
-                return response()->json(['del'=>1]);
+                return response()->json(['del'=>1]); // 1-有一些盘点表不是状态3
             }
             
         }
-        return response()->json(['del'=>0]);
+        return response()->json(['del'=>0]); // 0-登录失效
     }
-    /**************************  *强制删除订单  *********************************/
+    /**************************  强制删除订单  *********************************/
     public function delOrderMandatoryCode(Request $request){
-        // DebugBar::log($request->phonenumber.' '.$request->orderid);
         $orderidhasphone = $request->orderid.$request->phonenumber;
         $myinfo = User::find($request->phonenumber);
         if($request->cookie('phonenumber')==$myinfo->phonenumber && $request->cookie('password')==$myinfo->password){

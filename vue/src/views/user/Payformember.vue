@@ -84,25 +84,20 @@
         <tr>
           <td>支付状态</td>
           <td>已拥有</td>
-          <td>
+          <td v-if="!hasmidAuth">
             <el-button type="primary" @click="becomeMemberPay(1)">成为中级会员</el-button>
           </td>
-          <td>
+          <td v-if="hasmidAuth">已拥有</td>
+
+          <td v-if="!hassenAuth">
             <el-button type="primary" @click="becomeMemberPay(2)">成为高级会员</el-button>
           </td>
+          <td v-if="hassenAuth">已拥有</td>
+
         </tr>
       </table>
     </div>
 
-    <el-dialog title="温馨提示" v-model="tipdialogVisible" width="30%">
-        <span>此账号已被手机尾号为{{adminphone}}的账号管理，<br>如需恢复请点击“</span>
-          <el-button @click="tipdialogVisible=false;resetdialogVisible=true">初始化账号</el-button>
-        <span>”。</span>
-        <br><br><br>
-        <span class="dialog-footer">
-          <el-button type="primary" @click="tipdialogVisible=false">确 认</el-button>
-        </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -116,40 +111,41 @@ export default {
     data() {
       return {
         name: '',
-        isAdmin: false,
-        adminphone: '',
-        isAuth: false,
-
-        tipdialogVisible: false,
+        userAuth: 0,
+        hasmidAuth: false,
+        hassenAuth: false
       }
     },
     created() {
-      this.isAdminUser();
+      this.getUserAuth();
     },
     methods: {
-      /******************  进入页面确认是否是管理用户  **********************/
-      isAdminUser(){
+      /************************  获取用户的权限  **************************/
+      getUserAuth(){
         let that = this;
-        axios.post("/api/api/userdb/get_is_admin_user",{phonenumber: that.phonenumber})
+        axios.get("/api/api/userdb/get_only_userdata",{
+          params:{
+            phonenumber: that.phonenumber
+          }
+        })
         .then(function(response){
-          if(response.data.is==2){
-            console.log('用户是管理用户');
-            that.isAdmin=true;
-            that.name=response.data.name;
-            that.isAuth=response.data.auth;
-          }else if(response.data.is==1){
-            console.log('用户是被管理用户');
-            that.isAdmin=false;
-            that.adminphone=response.data.adminphone;
-            that.isAuth=response.data.auth;
-            that.tipdialogVisible=true;
-          }else if(response.data.is==0){
-            console.log('获取用户数据失败！');
+          if(response.data.getdata==1){
+            console.log('获取用户的权限成功');
+            that.name=response.data.data.name;
+            that.userAuth=response.data.data.auth;
+            switch(that.userAuth){
+              case 0:that.hasmidAuth=false;that.hassenAuth=false;break;
+              case 1:that.hasmidAuth=true;that.hassenAuth=false;break;
+              case 2:that.hasmidAuth=true;that.hassenAuth=true;break;
+              default:that.hasmidAuth=false;that.hassenAuth=false;break;
+            }
+          }else if(response.data.getdata==0){
+            console.log('获取用户的权限失败！');
             that.loginfail();
           }
         },function(err){console.log('获取用户数据错误！');});
       },
-      /************************  去往会员支付页面  *************************/
+      /************************  *去往会员支付页面  *************************/
       becomeMemberPay(authnum){
         let that = this;
         axios.post("/api/api/userdb/pay/",{

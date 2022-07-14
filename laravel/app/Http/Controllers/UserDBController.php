@@ -23,9 +23,25 @@ class UserDBController extends Controller
 {
     /******************************  注册用户  ******************************/
     public function insertUserdata(Request $request){
+        // 如果没有user表，就创建user表
+        if(!Schema::hasTable('user')){
+            Schema::create('user', function (Blueprint $table) {
+                $table->string('phonenumber',11)->unique();
+                $table->string('name',20);
+                $table->string('email',320);
+                $table->string('password',20);
+                $table->string('adminphone',11);
+                $table->string('adminkey',5);
+                $table->integer('subordernumber')->default(0);
+                $table->integer('auth')->default(0);
+                $table->integer('usersmax')->default(50);
+                $table->integer('comsmax')->default(1000);
+                $table->integer('ordersmax')->default(10);
+            });
+        }
         // 手机号是否注册过
         if(User::find($request->get('phonenumber'))){
-            return response()->json(['insert'=>1]);
+            return response()->json(['insert'=>1]); // 1-已有账号
         }else {
             $data = new User();
             $data->phonenumber=$request->get('phonenumber');
@@ -41,7 +57,7 @@ class UserDBController extends Controller
             }
             $data->adminkey=$validcode;
             $data->save();
-            return response()->json(['insert'=>2]);
+            return response()->json(['insert'=>2]); // 2-注册成功
         }
     }
     /******************************  登录后操作  ****************************/
@@ -103,6 +119,7 @@ class UserDBController extends Controller
         return response()->json(['get'=>0]);
     }
     /****************  搜索管理用户的用户名或手机号并分页获取  *****************/
+    // (根据手机号、搜索子串、分页数量、页码获取用户列表)
     public function getSearchPageAdminPhonedata(Request $request){
         $phonenumber_AdminPhone = $request->phonenumber_AdminPhone;
         $searchtext = $request->searchtext;

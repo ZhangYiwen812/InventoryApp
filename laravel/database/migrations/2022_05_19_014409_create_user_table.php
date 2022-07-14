@@ -22,6 +22,9 @@ class CreateUserTable extends Migration
             $table->string('adminkey',5);
             $table->integer('subordernumber')->default(0);
             $table->integer('auth')->default(0);
+            $table->integer('usersmax')->default(5);
+            $table->integer('comsmax')->default(50);
+            $table->integer('ordersmax')->default(1);
         });
     }
 

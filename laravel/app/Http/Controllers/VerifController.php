@@ -34,14 +34,16 @@ class VerifController extends Controller
     /******************************  登录验证  ******************************/
     // get请求 http://localhost:8080/api/captcha/api/math 获得img和url
     public function verifLogin(Request $request){
-        if($request->method() == 'POST'){
+        DebugBar::log($request->all());
+        if($request->method() == 'GET'){
             $rules = [
-                'phonenumber'=> 'required|string|min:11|max:11',
-                'password' => 'required|string|min:8|max:20',
+                'phonenumber'=> ['required','string','min:11','max:11','regex:/^\d+$/'],
+                'password' => ['required','string','min:8','max:20'],
             ];
             // 检查表单输入是否合法
             $validator = validator()->make($request->all(),$rules);
             if($validator->fails()){
+                DebugBar::log($validator->errors());
                 return response()->json(['verif'=>-1]);
             }else{
                 // 手机号是否注册过
@@ -180,7 +182,7 @@ class VerifController extends Controller
         }
         return 'method GET';
     }
-    /***************************  支付验证  **********************************/
+    /***************************  *支付验证  **********************************/
     public function verifPay(Request $request){
         $phonenumber = $request->phonenumber;
         $auth = $request->auth;
@@ -222,6 +224,11 @@ class VerifController extends Controller
         }
     }
     public function test(Request $request){
+        // $data1 = User::where('adminphone','15050500002')->get()->toArray();
+        // $data2 = DB::table('user')->where('adminphone','15050500002')->get()->toArray();
+        // DebugBar::log($data1);
+        // DebugBar::log($data2);
+
         // $arr = ['15050500001','15050572717','15050500006','15050500005','15050500015'];
         // $userdb = DB::table('user')->whereIn('phonenumber',$arr);
         // DebugBar::log($userdb->get()->toArray());

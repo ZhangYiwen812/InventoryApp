@@ -81,10 +81,12 @@
       /*************************  验证后注册  **************************/
       onVerifyCaptchtoRegister(){
         let that = this;
-        axios.post("/api/api/verif_captcha",
+        axios.get("/api/api/verif_captcha",
         {
-          captcha: this.form.captcha,
-          key: this.form.key,
+          params:{
+            captcha: that.form.captcha,
+            key: that.form.key,
+          }
         }).then(function(response){
             console.log(response.data);
             if(response.data.verif==1){
@@ -100,11 +102,6 @@
       },
       /*************************  注册账号  **************************/
       onRegister() {
-        console.log("phonenumber="+this.form.phonenumber+
-                    ",name="+this.form.name+
-                    ",email="+this.form.email+
-                    ",password1="+this.form.password1+
-                    ",password2="+this.form.password2);
         let that = this;
         axios.post("/api/api/verif_register"
           ,{

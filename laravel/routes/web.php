@@ -9,9 +9,9 @@ Route::get('/', function () {
 Route::group(['prefix' => 'api'],function () {
     /******************************  验证相关方法  ********************************/
     // 验证码验证
-    Route::post('verif_captcha','VerifController@verifCaptcha');
+    Route::get('verif_captcha','VerifController@verifCaptcha');
     // 登录验证
-    Route::post('verif_login','VerifController@verifLogin');
+    Route::get('verif_login','VerifController@verifLogin');
     // 退出登录
     Route::post('Log_out','VerifController@Logout');
     // *验证登录状态
@@ -33,15 +33,15 @@ Route::group(['prefix' => 'api'],function () {
     // 检查登录有效性
     Route::post('userdb/is_logon','UserDBController@isLogon');
     // 获取用户是否是管理用户
-    Route::post('userdb/get_is_admin_user','UserDBController@getIsAdminUser');
+    Route::get('userdb/get_is_admin_user','UserDBController@getIsAdminUser');
     // 获取用户数据
-    Route::post('userdb/get_only_userdata','UserDBController@getOnlyUserdata');
+    Route::get('userdb/get_only_userdata','UserDBController@getOnlyUserdata');
     // *获取指定管理用户的用户列表
     Route::post('userdb/get_only_admin_phonedata','UserDBController@getOnlyAdminPhonedata');
     // 获取指定管理用户的用户列表(适应穿梭框)
-    Route::post('userdb/get_only_admin_phonedata_totransfer','UserDBController@getOnlyAdminPhonedataTotransfer');
-    // 搜索管理用户的用户名或手机号并分页获取
-    Route::post('userdb/get_search_page_admin_phonedata','UserDBController@getSearchPageAdminPhonedata');
+    Route::get('userdb/get_only_admin_phonedata_totransfer','UserDBController@getOnlyAdminPhonedataTotransfer');
+    // 搜索管理用户的用户名或手机号并分页获取(根据手机号、搜索子串、分页数量、页码获取用户列表)
+    Route::get('userdb/get_search_page_admin_phonedata','UserDBController@getSearchPageAdminPhonedata');
     // *修改密码
     Route::post('userdb/updata_user_password','UserDBController@updataUserPassword');
     // 修改姓名
@@ -60,7 +60,7 @@ Route::group(['prefix' => 'api'],function () {
     Route::post('userdb/del_selection_admin_phone','UserDBController@delSelectionAdminPhone');
     // 删除账号 复位管理账号
     Route::post('userdb/del_admin_phone','UserDBController@delAdminPhone');
-    // Excel批量添加用户数据
+    // Excel批量添加用户数据 使用post传数组
     Route::post('userdb/insert_excel_all_userdata','UserDBController@insertExcelAllUserdata');
     // 下载账号样表
     Route::get('userdb/download_user_exampletable','UserDBController@downloadUserExampletable');
@@ -71,7 +71,7 @@ Route::group(['prefix' => 'api'],function () {
     // 删除数据表
     Route::post('commoditydb/drop_commoditytable','CommodityDBController@dropCommoditytable');
     // 分页获取并搜索商品数据
-    Route::post('commoditydb/get_search_page_commoditydata','CommodityDBController@getSearchPageCommoditydata');
+    Route::get('commoditydb/get_search_page_commoditydata','CommodityDBController@getSearchPageCommoditydata');
     // *获取商品数据
     Route::post('commoditydb/get_commoditydata','CommodityDBController@getCommoditydata');
     // 添加商品数据
@@ -80,7 +80,7 @@ Route::group(['prefix' => 'api'],function () {
     Route::post('commoditydb/del_selection_commoditydata','CommodityDBController@delSelectionCommoditydata');
     // 清除所有商品数据
     Route::post('commoditydb/del_all_commoditydata','CommodityDBController@delAllCommoditydata');
-    // Excel批量添加商品数据
+    // Excel批量添加商品数据 使用post传数组
     Route::post('commoditydb/insert_excel_all_commoditydata','CommodityDBController@insertExcelAllCommoditydata');
     // 下载商品样表
     Route::get('commoditydb/download_commodity_exampletable','CommodityDBController@downloadCommodityExampletable');
@@ -93,16 +93,18 @@ Route::group(['prefix' => 'api'],function () {
 
     /**************************  订单数据操作  ***********************************/
     // 获取订单列表
-    Route::post('orderdb/get_order_list','OrderDBController@getOrderList');
+    Route::get('orderdb/get_order_list','OrderDBController@getOrderList');
     // 获取指定订单编号的盘点人员信息
-    Route::post('orderdb/get_only_order_info','OrderDBController@getOnlyOrderInfo');
+    Route::get('orderdb/get_only_order_info','OrderDBController@getOnlyOrderInfo');
     // 创建订单
     Route::post('orderdb/create_order','OrderDBController@createOrder');
     // 删除订单
     Route::post('orderdb/del_order','OrderDBController@delOrder');
+    // 强制删除订单
+    Route::post('orderdb/del_order_mandatory_code','OrderDBController@delOrderMandatoryCode');
     // 验证盘点状态
     Route::post('orderdb/verif_states','OrderDBController@verifStates');
-    // 下载Excel库存数据
+    // 下载Excel库存数据 使用post传数组
     Route::post('orderdb/download_stock','OrderDBController@downloadStock');
 });
 

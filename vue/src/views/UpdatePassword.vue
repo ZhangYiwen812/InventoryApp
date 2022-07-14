@@ -119,7 +119,7 @@
           that.emailButtondisabled = true;
         },function(err){console.log('发送验证码失败');});
       },
-      /**************************  验证表单  ****************************/
+      /********************  验证表单 使用post验证数据  *******************/
       verifForm(){
         let that = this;
         axios.post("/api/api/verif_form",

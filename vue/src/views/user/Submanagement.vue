@@ -230,14 +230,17 @@
       this.getData();
     },
     methods: {
-      /**********  根据手机号、搜索子串、分页数量、页码获取用户列表  *************/
+      /*************  搜索管理用户的用户名或手机号并分页获取  ****************/
+      // (根据手机号、搜索子串、分页数量、页码获取用户列表)
       getData(){
         let that = this;
-        axios.post('/api/api/userdb/get_search_page_admin_phonedata',{
-          phonenumber_AdminPhone: that.phonenumber,
-          searchtext: that.searchtext,
-          pageSize: that.pageSize,
-          currentPage: that.currentPage,
+        axios.get('/api/api/userdb/get_search_page_admin_phonedata',{
+          params:{
+            phonenumber_AdminPhone: that.phonenumber,
+            searchtext: that.searchtext,
+            pageSize: that.pageSize,
+            currentPage: that.currentPage
+          }
         }).then(function(response) {
           if(response.data.getdata==1 || response.data.getdata==2){
             that.totalSize = response.data.data.total;
@@ -376,7 +379,7 @@
         this.formData.append('phonenumber',this.phonenumber);
         this.formData.append('addUsersfile',files);
       },
-      /*******************  Excel批量添加用户数据  ****************************/
+      /*************  Excel批量添加用户数据 使用post传数组  ********************/
       uploadExcel() {
         let that = this;
         axios.post('/api/api/userdb/insert_excel_all_userdata',
@@ -489,10 +492,11 @@
 .title {
   font-size: 18px;
   line-height: 35px;
-  text-align: center;
+  text-align: left;
   width: 801px;
   height: 35px;
   margin: 0px 0px 15px 0px;
+  border-bottom: 1px solid var(--el-color-primary-light-3);
 }
 .editlist {
   float: left;

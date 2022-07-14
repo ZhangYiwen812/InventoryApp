@@ -16,7 +16,7 @@ use Barryvdh\Debugbar\Facade as DebugBar;
 
 class CommodityDBController extends Controller
 {
-    /****************************  *创建数据表  ********************************/
+    /**************************  *创建商品数据表  ********************************/
     // ['id','name','smallunit_amount','smallunit','bigunit','bigtosmall_specs']
     public function createCommoditytable(Request $request){
         $data = User::find($request->phonenumber);
@@ -25,7 +25,6 @@ class CommodityDBController extends Controller
                 Schema::create('commodity'.$request->phonenumber, function (Blueprint $table) {
                     $table->string('id',10)->unique();
                     $table->string('name',30);
-                    $table->biginteger('smallunit_amount')->unsigned();
                     $table->string('smallunit',1);
                     $table->string('bigunit',1);
                     $table->integer('bigtosmall_specs');
@@ -58,7 +57,6 @@ class CommodityDBController extends Controller
                 Schema::create('commodity'.$request->phonenumber, function (Blueprint $table) {
                     $table->string('id',10)->unique();
                     $table->string('name',30);
-                    $table->biginteger('smallunit_amount')->unsigned(); //最大999 999 999
                     $table->string('smallunit',1);
                     $table->string('bigunit',1);
                     $table->integer('bigtosmall_specs')->unsigned(); //最大999 999 999
@@ -115,7 +113,6 @@ class CommodityDBController extends Controller
                         $commodity = new Commodity($phonenumber);
                         $commodity->id = $request->id;
                         $commodity->name = $request->name;
-                        $commodity->smallunit_amount = 0;
                         $commodity->smallunit = $request->smallunit;
                         $commodity->bigunit = $request->bigunit;
                         $commodity->bigtosmall_specs = $request->bigtosmall_specs;

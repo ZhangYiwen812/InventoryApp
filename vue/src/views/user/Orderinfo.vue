@@ -144,9 +144,11 @@
       /********************  获取指定订单编号的盘点人员信息  **********************/
       getData(){
         let that = this;
-        axios.post('/api/api/orderdb/get_only_order_info',{
-          sendphonenumber: that.phonenumber,
-          orderid: that.orderid
+        axios.get('/api/api/orderdb/get_only_order_info',{
+          params:{
+            sendphonenumber: that.phonenumber,
+            orderid: that.orderid
+          }
         }).then(function(response) {
           if(response.data.get==1){
             that.stockPersons=response.data.data;

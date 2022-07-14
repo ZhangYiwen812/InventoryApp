@@ -70,7 +70,6 @@ class CommoditysImport implements ToCollection
                         array_push($data,[
                             'id' => $row[0],
                             'name' => $row[1],
-                            'smallunit_amount' => 0,
                             'smallunit' => $row[2],
                             'bigunit' => $row[3],
                             'bigtosmall_specs' => $row[4]
