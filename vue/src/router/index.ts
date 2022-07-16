@@ -23,30 +23,48 @@ const routes = [
   },
   {
     path: '/login',
-    component: Login
+    component: Login,
+    meta:{
+      title:"登录"
+    }
   },
   {
     path: '/updatepassword',
-    component: UpdatePassword
+    component: UpdatePassword,
+    meta:{
+      title:"修改密码"
+    }
   },
   {
     path: '/register',
-    component: Register
+    component: Register,
+    meta:{
+      title:"注册账号"
+    }
   },
   {
     path: '/delay',
-    component: Delay
+    component: Delay,
+    meta:{
+      title:"请您稍等"
+    }
   },
   {
     path: '/user/payformember/:phonenumber',
     name:"Payformember",
     component:Payformember,
-    props: true
+    props: true,
+    meta:{
+      title:"支付页面"
+    }
   },
   {
       path: '/main/:phonenumber',
       component: Main,
       props: true,
+      meta:{
+        title:"柳文盘点系统Web管理端"
+      },
       children: [
           {
             path:"/user/accountinfo/:phonenumber",
@@ -106,5 +124,11 @@ router.beforeEach((to, from, next)=>{
     next(true);
   }
 });
+
+router.afterEach((to, from) => {
+  if(typeof(to.meta.title) === 'string'){
+    document.title = to.meta.title; //在全局后置守卫中获取路由元信息设置title
+  }
+})
 
 export default router
