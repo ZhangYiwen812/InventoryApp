@@ -123,7 +123,7 @@ export default {
       /************************  获取用户的权限  **************************/
       getUserAuth(){
         let that = this;
-        axios.get("/api/api/userdb/get_only_userdata",{
+        axios.get(this.$store.state.url+"/api/userdb/get_only_userdata",{
           params:{
             phonenumber: that.phonenumber
           }
@@ -148,7 +148,7 @@ export default {
       /************************  *去往会员支付页面  *************************/
       becomeMemberPay(authnum){
         let that = this;
-        axios.post("/api/api/userdb/pay/",{
+        axios.post(this.$store.state.url+"/api/userdb/pay/",{
           phonenumber: that.phonenumber,
           auth: authnum
         }).then(function(response){
@@ -169,7 +169,7 @@ export default {
       /***************************  退出登录  *******************************/
       Loginout(){
         let that = this;
-        axios.post('/api/api/Log_out',{
+        axios.post(this.$store.state.url+'/api/Log_out',{
           phonenumber: that.phonenumber
         }).then(function(response){
           if(response.data.Logout==1){

@@ -113,7 +113,7 @@
       /********************  进入页面确认是否是管理用户  ************************/
       isAdminUser(){
         let that = this;
-        axios.get("/api/api/userdb/get_is_admin_user",{
+        axios.get(this.$store.state.url+"/api/userdb/get_is_admin_user",{
           params:{
             phonenumber: that.phonenumber
           }
@@ -137,7 +137,7 @@
       /******************************  初始化账号  ******************************/
       onReset() {
         let that = this;
-        axios.post('/api/api/userdb/reset_userdata',{phonenumber: that.phonenumber}).then(function(response){
+        axios.post(this.$store.state.url+'/api/userdb/reset_userdata',{phonenumber: that.phonenumber}).then(function(response){
           if(response.data.reset==1){
             ElMessage({
                 showClose: true,
@@ -154,13 +154,30 @@
       },
       /*************************  去往成为会员  *****************************/
       toMember(){
+        let that = this;
+        axios.post(this.$store.state.url+'/api/test',{
+          phonenumber: that.phonenumber
+        }).then(function(response){
+          if(response.data.Logout==1){
+            ElMessage({
+                showClose: true,
+                message: '已添加注册用户',
+                type: 'success',
+            });
+            console.log('已添加注册用户');
+          }else if(response.data.Logout==0){
+            console.log('添加注册用户失败！');
+            that.loginfail();
+          }
+        },function(err){console.log('添加注册用户错误！');})
+
         this.$router.push("/user/payformember/"+this.phonenumber);
       },
       /***************************  退出登录  ******************************/
       Loginout(){
         // 删除cookie
         let that = this;
-        axios.post('/api/api/Log_out',{
+        axios.post(this.$store.state.url+'/api/Log_out',{
           phonenumber: that.phonenumber
         }).then(function(response){
           if(response.data.Logout==1){

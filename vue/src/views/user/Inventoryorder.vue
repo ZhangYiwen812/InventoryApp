@@ -125,7 +125,7 @@
       /***************************  获取订单列表  *******************************/
       getData(){
         let that = this;
-        axios.get('/api/api/orderdb/get_order_list',{
+        axios.get(this.$store.state.url+'/api/orderdb/get_order_list',{
           params:{
             sendphonenumber: that.phonenumber
           }
@@ -154,7 +154,7 @@
       /************************  打开创建订单的对话框  ***************************/
       openCreateOrderDialog() {
         let that = this;
-        axios.get('/api/api/userdb/get_only_admin_phonedata_totransfer',{
+        axios.get(this.$store.state.url+'/api/userdb/get_only_admin_phonedata_totransfer',{
           params:{
             phonenumber: that.phonenumber
           }
@@ -182,7 +182,7 @@
       createOrder(){
         this.newOrderdialogVisible=false;
         let that = this;
-        axios.post('/api/api/orderdb/create_order',{
+        axios.post(this.$store.state.url+'/api/orderdb/create_order',{
           sendphonenumber: that.phonenumber,
           recphonenumbers: that.rightValue,
         }).then(function(response) {
@@ -224,7 +224,7 @@
       /***************************  删除订单  ***********************************/
       deleteOrder(){
         let that = this;
-        axios.post('/api/api/orderdb/del_order',{
+        axios.post(this.$store.state.url+'/api/orderdb/del_order',{
           phonenumber: that.phonenumber,
           orderid: that.delorderid
         }).then(function(response) {
@@ -256,7 +256,7 @@
       /*************************  强制删除订单  ***********************************/
       delOrderMandatoryCode(){
         let that = this;
-        axios.post('/api/api/orderdb/del_order_mandatory_code',{
+        axios.post(this.$store.state.url+'/api/orderdb/del_order_mandatory_code',{
           phonenumber: that.phonenumber,
           orderid: that.delorderid
         }).then(function(response) {

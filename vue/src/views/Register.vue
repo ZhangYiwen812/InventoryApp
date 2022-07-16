@@ -70,7 +70,7 @@
       /*************************  刷新验证码  **************************/
       updateImgurl(){
         let that = this;
-        axios.get("/api/captcha/api/math")
+        axios.get(this.$store.state.url+"/captcha/api/math")
           .then(function(response){
             console.log(response);
             that.form.imgurl = response.data.img;
@@ -81,7 +81,7 @@
       /*************************  验证后注册  **************************/
       onVerifyCaptchtoRegister(){
         let that = this;
-        axios.get("/api/api/verif_captcha",
+        axios.get(this.$store.state.url+"/api/verif_captcha",
         {
           params:{
             captcha: that.form.captcha,
@@ -103,7 +103,7 @@
       /*************************  注册账号  **************************/
       onRegister() {
         let that = this;
-        axios.post("/api/api/verif_register"
+        axios.post(this.$store.state.url+"/api/verif_register"
           ,{
             phonenumber: that.form.phonenumber,
             name: that.form.name,

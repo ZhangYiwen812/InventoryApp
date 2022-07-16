@@ -59,7 +59,7 @@
       /**************************  刷新验证码  **************************/
       updateImgurl(){
         let that = this;
-        axios.get("/api/captcha/api/math")
+        axios.get(this.$store.state.url+"/captcha/api/math")
           .then(function(response){
               that.form.imgurl = response.data.img;
               that.form.key = response.data.key
@@ -69,7 +69,7 @@
       /**************************  验证后登陆  **************************/
       onVerifyCaptchtoLogin(){
         let that = this;
-        axios.get("/api/api/verif_captcha",
+        axios.get(this.$store.state.url+"/api/verif_captcha",
         {
           params:{
             captcha: that.form.captcha,
@@ -89,10 +89,10 @@
       },
       /**************************  登陆账号  **************************/
       onLogin() {
-        console.log(this.form.phonenumber);
-        console.log(this.form.password);
+        // console.log(this.form.phonenumber);
+        // console.log(this.form.password);
         let that = this;
-        axios.get("/api/api/verif_login",
+        axios.get(this.$store.state.url+"/api/verif_login",
         {
           params:{
             phonenumber: that.form.phonenumber,

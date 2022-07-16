@@ -20,6 +20,16 @@ class OrderDBController extends Controller
     public function getOrderList(Request $request){
         $data1 = User::find($request->sendphonenumber);
         if($request->cookie('phonenumber')==$data1->phonenumber && $request->cookie('password')==$data1->password){
+            // 建立订单表
+            if(!Schema::hasTable('order')){
+                Schema::create('order', function (Blueprint $table) {
+                    $table->string('orderid',27);
+                    $table->string('sendphonenumber',11);
+                    $table->string('recphonenumber',11);
+                    $table->integer('state');
+                    $table->integer('subtotal')->unsigned();
+                });
+            }
             $orderids=DB::table('order')->select('orderid')->orderBy('orderid', 'asc')->distinct()->get()->toArray();
             // DebugBar::log($orderids);
             $orderList = [];
