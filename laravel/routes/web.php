@@ -108,12 +108,6 @@ Route::group(['prefix' => 'webapi'],function () {
     Route::post('orderdb/download_stock','OrderDBController@downloadStock');
 });
 
-// Route::post('/userdb/get_only_userdata','UserDBController@getOnlyUserdata');
-// Route::post('/api/valid_login','ValidController@validLogin');
-
-// Route::get('/api/valid_login','ValidController@validLogin');
 Route::any('/api/test','VerifController@test');
 Route::get('/api/test2','VerifController@test2');
 
-Route::get('userdb/test','UserDBController@test');
-Route::get('userdb/test2','UserDBController@test2');
