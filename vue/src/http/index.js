@@ -13,11 +13,12 @@ const serviceAxios = axios.create({
 // 请求拦截
 serviceAxios.interceptors.request.use(
     (config)=>{
-        // console.log('请求拦截请求配置',config);
+        console.log('请求拦截请求配置',config);
         loadingInstance = ElLoading.service({ 
             fullscreen: true,
             text: '请您耐心等待，系统正在加载......' 
-        })
+        });
+        // console.log(config);
         return config;
     },(error)=>{
         // console.log('请求拦截错误',error);
@@ -28,11 +29,11 @@ serviceAxios.interceptors.request.use(
 // 响应拦截
 serviceAxios.interceptors.response.use(
     (res)=>{
-        // console.log('响应拦截响应结果',res);
+        console.log('响应拦截响应结果',res);
         loadingInstance.close();
         return res;
     },(error)=>{
-        // console.log('响应拦截错误',error);
+        console.log('响应拦截错误',error);
         loadingInstance.close();
         return Promise.reject(error);
     }
