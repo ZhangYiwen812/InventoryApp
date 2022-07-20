@@ -1,14 +1,10 @@
 <?php
 // GitHub Webhook Secret.
-// GitHub项目 Settings/Webhooks 中的 Secret
+
 $secret = "a987654321";
 
-// Path to your respostory on your server.
-// e.g. "/var/www/respostory"
-// 项目地址
 $path = "/usr/share/nginx";
 
-// Headers deliveried from GitHub
 $signature = $_SERVER['HTTP_X_HUB_SIGNATURE'];
 
 if ($signature) {
