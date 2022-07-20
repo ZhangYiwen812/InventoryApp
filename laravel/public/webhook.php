@@ -1,10 +1,4 @@
 <?php
-// GitHub Webhook Secret.
-
-
-
-
-
 
 $secret = "a987654321";
 
