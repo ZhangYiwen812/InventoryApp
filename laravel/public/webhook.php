@@ -1,9 +1,14 @@
 <?php
 // GitHub Webhook Secret.
 
+
+
+
+
+
 $secret = "a987654321";
 
-$path = "/usr/share/nginx";
+$path = "/usr/share/nginx/InventoryApp";
 
 $signature = $_SERVER['HTTP_X_HUB_SIGNATURE'];
 
