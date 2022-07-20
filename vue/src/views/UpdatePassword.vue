@@ -98,7 +98,7 @@
       /*****************  设置修改密码的用户并返回email  ******************/
       setUpdataPasswordUser(){
         let that = this;
-        axios.post(this.$store.state.url+"/api/set_updata_password_user",{phonenumber: that.form.phonenumber}).then(function(response){
+        axios.post(this.$store.state.url+"/webapi/set_updata_password_user",{phonenumber: that.form.phonenumber}).then(function(response){
           if(response.data.setcomplete==1){
             that.form.email = response.data.email;
             that.uppassbtn=false;
@@ -114,7 +114,7 @@
       /************************  发送邮箱验证码  *************************/
       sendEmailvalid(){
         let that = this;
-        axios.post(this.$store.state.url+"/api/send_emailvalidcode",{phonenumber: that.form.phonenumber}).then(function(response){
+        axios.post(this.$store.state.url+"/webapi/send_emailvalidcode",{phonenumber: that.form.phonenumber}).then(function(response){
           that.startTimerVerif();
           that.emailButtondisabled = true;
         },function(err){console.log('发送验证码失败');});
@@ -122,7 +122,7 @@
       /********************  验证表单 使用post验证数据  *******************/
       verifForm(){
         let that = this;
-        axios.post(this.$store.state.url+"/api/verif_form",
+        axios.post(this.$store.state.url+"/webapi/verif_form",
         {
           phonenumber: this.form.phonenumber,
           newpassword1: this.form.newpassword1,

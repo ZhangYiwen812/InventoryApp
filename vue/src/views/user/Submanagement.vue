@@ -227,7 +227,7 @@
     // mounted() {
     created() {
       // 指定分页数量获取第一页数据
-      this.userlinkurl=this.$store.state.url+'/api/userdb/download_user_exampletable';
+      this.userlinkurl=this.$store.state.url+'/webapi/userdb/download_user_exampletable';
       this.getData();
     },
     methods: {
@@ -235,7 +235,7 @@
       // (根据手机号、搜索子串、分页数量、页码获取用户列表)
       getData(){
         let that = this;
-        axios.get(this.$store.state.url+'/api/userdb/get_search_page_admin_phonedata',{
+        axios.get(this.$store.state.url+'/webapi/userdb/get_search_page_admin_phonedata',{
           params:{
             phonenumber_AdminPhone: that.phonenumber,
             searchtext: that.searchtext,
@@ -263,7 +263,7 @@
           });
         }else{
           let that = this;
-          axios.post(this.$store.state.url+'/api/userdb/insert_admin_phone',{
+          axios.post(this.$store.state.url+'/webapi/userdb/insert_admin_phone',{
             phonenumber: that.phonenumber,
             addPhonenumber: that.addPhonenumber,
             adminkey: that.adminkey,
@@ -330,7 +330,7 @@
             });
         }else{
           let that = this;
-          axios.post(this.$store.state.url+'/api/userdb/del_selection_admin_phone',{
+          axios.post(this.$store.state.url+'/webapi/userdb/del_selection_admin_phone',{
             phonenumber: that.phonenumber,
             removePhonenumbers: that.removePhonenumbers,
           }).then(function(response) {
@@ -354,7 +354,7 @@
       /*************************  清除所有账号  ******************************/
       handleAllDelete(){
         let that = this;
-        axios.post(this.$store.state.url+'/api/userdb/del_all_admin_phone',{
+        axios.post(this.$store.state.url+'/webapi/userdb/del_all_admin_phone',{
           phonenumber: that.phonenumber,
         }).then(function(response) {
           if(response.data.delAll==1){
@@ -383,7 +383,7 @@
       /*************  Excel批量添加用户数据 使用post传数组  ********************/
       uploadExcel() {
         let that = this;
-        axios.post(this.$store.state.url+'/api/userdb/insert_excel_all_userdata',
+        axios.post(this.$store.state.url+'/webapi/userdb/insert_excel_all_userdata',
           that.formData,
           {headers: {'Content-Type': 'multipart/form-data'}}
         ).then(function(response) {
@@ -452,7 +452,7 @@
       /*******************  删除指定账号 复位管理账号 **************************/
       handleDelete(){
         let that = this;
-        axios.post(this.$store.state.url+'/api/userdb/del_admin_phone',{
+        axios.post(this.$store.state.url+'/webapi/userdb/del_admin_phone',{
           phonenumber: that.phonenumber,
           removePhonenumber: that.removePhonenumber
         }).then(function(response) {

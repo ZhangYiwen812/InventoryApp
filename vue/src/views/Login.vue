@@ -69,7 +69,7 @@
       /**************************  验证后登陆  **************************/
       onVerifyCaptchtoLogin(){
         let that = this;
-        axios.get(this.$store.state.url+"/api/verif_captcha",
+        axios.get(this.$store.state.url+"/webapi/verif_captcha",
         {
           params:{
             captcha: that.form.captcha,
@@ -92,7 +92,7 @@
         // console.log(this.form.phonenumber);
         // console.log(this.form.password);
         let that = this;
-        axios.get(this.$store.state.url+"/api/verif_login",
+        axios.get(this.$store.state.url+"/webapi/verif_login",
         {
           params:{
             phonenumber: that.form.phonenumber,

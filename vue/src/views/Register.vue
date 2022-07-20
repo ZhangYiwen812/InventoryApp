@@ -81,7 +81,7 @@
       /*************************  验证后注册  **************************/
       onVerifyCaptchtoRegister(){
         let that = this;
-        axios.get(this.$store.state.url+"/api/verif_captcha",
+        axios.get(this.$store.state.url+"/webapi/verif_captcha",
         {
           params:{
             captcha: that.form.captcha,
@@ -103,7 +103,7 @@
       /*************************  注册账号  **************************/
       onRegister() {
         let that = this;
-        axios.post(this.$store.state.url+"/api/verif_register"
+        axios.post(this.$store.state.url+"/webapi/verif_register"
           ,{
             phonenumber: that.form.phonenumber,
             name: that.form.name,

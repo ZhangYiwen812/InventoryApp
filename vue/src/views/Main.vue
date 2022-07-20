@@ -113,7 +113,7 @@
       /********************  进入页面确认是否是管理用户  ************************/
       isAdminUser(){
         let that = this;
-        axios.get(this.$store.state.url+"/api/userdb/get_is_admin_user",{
+        axios.get(this.$store.state.url+"/webapi/userdb/get_is_admin_user",{
           params:{
             phonenumber: that.phonenumber
           }
@@ -137,7 +137,7 @@
       /******************************  初始化账号  ******************************/
       onReset() {
         let that = this;
-        axios.post(this.$store.state.url+'/api/userdb/reset_userdata',{phonenumber: that.phonenumber}).then(function(response){
+        axios.post(this.$store.state.url+'/webapi/userdb/reset_userdata',{phonenumber: that.phonenumber}).then(function(response){
           if(response.data.reset==1){
             ElMessage({
                 showClose: true,
@@ -155,7 +155,7 @@
       /*************************  去往成为会员  *****************************/
       toMember(){
         let that = this;
-        axios.post(this.$store.state.url+'/api/test',{
+        axios.post(this.$store.state.url+'/webapi/test',{
           phonenumber: that.phonenumber
         }).then(function(response){
           if(response.data.Logout==1){
@@ -177,7 +177,7 @@
       Loginout(){
         // 删除cookie
         let that = this;
-        axios.post(this.$store.state.url+'/api/Log_out',{
+        axios.post(this.$store.state.url+'/webapi/Log_out',{
           phonenumber: that.phonenumber
         }).then(function(response){
           if(response.data.Logout==1){

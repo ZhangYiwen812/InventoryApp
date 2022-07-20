@@ -6,7 +6,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['prefix' => 'api'],function () {
+Route::group(['prefix' => 'webapi'],function () {
     /******************************  验证相关方法  ********************************/
     // 验证码验证
     Route::get('verif_captcha','VerifController@verifCaptcha');

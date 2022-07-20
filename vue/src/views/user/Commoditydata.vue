@@ -284,14 +284,14 @@
     // mounted() {
     created() {
       // 指定分页数量获取第一页数据
-      this.comlinkurl=this.$store.state.url+'/api/commoditydb/download_commodity_exampletable';
+      this.comlinkurl=this.$store.state.url+'/webapi/commoditydb/download_commodity_exampletable';
       this.getData();
     },
     methods: {
       /**********  根据手机号、搜索子串、分页数量、页码获取商品列表  ***********/
       getData(){
         let that = this;
-        axios.get(this.$store.state.url+'/api/commoditydb/get_search_page_commoditydata',{
+        axios.get(this.$store.state.url+'/webapi/commoditydb/get_search_page_commoditydata',{
           params:{
             phonenumber: that.phonenumber,
             searchtext: that.searchtext,
@@ -426,7 +426,7 @@
       /******************* 更新商品信息 添加更新对话框 ************************/
       handleUpdata(){
         let that = this;
-        axios.post(this.$store.state.url+'/api/commoditydb/update_commoditydata',{
+        axios.post(this.$store.state.url+'/webapi/commoditydb/update_commoditydata',{
           phonenumber: that.phonenumber,
           id: that.addupdataComm.id, // 编号
           name: that.addupdataComm.name, // 名称
@@ -477,7 +477,7 @@
             });
         }else{
           let that = this;
-          axios.post(this.$store.state.url+'/api/commoditydb/del_selection_commoditydata',{
+          axios.post(this.$store.state.url+'/webapi/commoditydb/del_selection_commoditydata',{
             phonenumber: that.phonenumber,
             delCommodityids: that.delCommodityids,
           }).then(function(response) {
@@ -501,7 +501,7 @@
       /***********************  清除所有商品  ********************************/
       handleAllDelete(){
         let that = this;
-        axios.post(this.$store.state.url+'/api/commoditydb/del_all_commoditydata',{
+        axios.post(this.$store.state.url+'/webapi/commoditydb/del_all_commoditydata',{
           phonenumber: that.phonenumber,
         }).then(function(response) {
           if(response.data.delAll==1){
@@ -530,7 +530,7 @@
       /**************  Excel批量添加商品数据 使用post传数组  *******************/
       updataExcel() {
         let that = this;
-        axios.post(this.$store.state.url+'/api/commoditydb/insert_excel_all_commoditydata',
+        axios.post(this.$store.state.url+'/webapi/commoditydb/insert_excel_all_commoditydata',
           that.formData,
           {headers: {'Content-Type': 'multipart/form-data'}}
         ).then(function(response) {
@@ -596,7 +596,7 @@
       /****************************  删除商品  *******************************/
       handleDelete(){
         let that = this;
-        axios.post(this.$store.state.url+'/api/commoditydb/del_commoditydata',{
+        axios.post(this.$store.state.url+'/webapi/commoditydb/del_commoditydata',{
           phonenumber: that.phonenumber,
           removeCommodityid: that.removeCommodityid
         }).then(function(response) {

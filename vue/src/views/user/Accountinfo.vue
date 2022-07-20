@@ -81,7 +81,7 @@
     mounted: function(){
       /**************************  进入页面获取用户数据  ****************************/
       let that = this;
-      axios.get(this.$store.state.url+"/api/userdb/get_only_userdata",{
+      axios.get(this.$store.state.url+"/webapi/userdb/get_only_userdata",{
         params:{
           phonenumber: that.phonenumber
         }
@@ -108,7 +108,7 @@
       /******************************  修改姓名  *******************************/
       updateName(){
         let that = this;
-        axios.post(this.$store.state.url+"/api/userdb/updata_user_name",{phonenumber: that.phonenumber,newname: that.newname})
+        axios.post(this.$store.state.url+"/webapi/userdb/updata_user_name",{phonenumber: that.phonenumber,newname: that.newname})
         .then(function(response){
           if(response.data.updata==2){
             that.name=that.newname;
@@ -136,7 +136,7 @@
       /*****************************  刷新管理密匙  *******************************/
       refreshKey(){
         let that = this;
-        axios.post(this.$store.state.url+"/api/userdb/refresh_key",{phonenumber: that.phonenumber})
+        axios.post(this.$store.state.url+"/webapi/userdb/refresh_key",{phonenumber: that.phonenumber})
         .then(function(response){
           if(response.data.refresh==1){
             that.adminkey=response.data.data.adminkey;
@@ -156,7 +156,7 @@
       /******************************  销毁账号  *******************************/
       onDestroy(){
         let that = this;
-        axios.post(this.$store.state.url+'/api/userdb/destroy_userdata',{phonenumber: that.phonenumber}).then(function(response){
+        axios.post(this.$store.state.url+'/webapi/userdb/destroy_userdata',{phonenumber: that.phonenumber}).then(function(response){
           if(response.data.destroy==1){
             ElMessage({
                 showClose: true,
@@ -174,7 +174,7 @@
       /******************************  初始化账号  ******************************/
       onReset() {
         let that = this;
-        axios.post(this.$store.state.url+'/api/userdb/reset_userdata',{phonenumber: that.phonenumber}).then(function(response){
+        axios.post(this.$store.state.url+'/webapi/userdb/reset_userdata',{phonenumber: that.phonenumber}).then(function(response){
           if(response.data.reset==1){
             ElMessage({
                 showClose: true,

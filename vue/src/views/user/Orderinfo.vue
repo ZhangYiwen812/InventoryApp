@@ -144,7 +144,7 @@
       /********************  获取指定订单编号的盘点人员信息  **********************/
       getData(){
         let that = this;
-        axios.get(this.$store.state.url+'/api/orderdb/get_only_order_info',{
+        axios.get(this.$store.state.url+'/webapi/orderdb/get_only_order_info',{
           params:{
             sendphonenumber: that.phonenumber,
             orderid: that.orderid
@@ -165,7 +165,7 @@
         // console.log(this.sumStockPersons);
         if(this.sumStockPersons.length>0){
           let that = this;
-          axios.post(this.$store.state.url+'/api/orderdb/verif_states',{
+          axios.post(this.$store.state.url+'/webapi/orderdb/verif_states',{
             sendphonenumber: that.phonenumber,
             orderid: that.orderid,
             sumPhonenumbers: that.sumStockPersons
@@ -211,7 +211,7 @@
       /************************  下载Excel导出库存数据  *************************/
       downloadExcel(){
         let that = this;
-        axios.post(this.$store.state.url+'/api/orderdb/download_stock',{
+        axios.post(this.$store.state.url+'/webapi/orderdb/download_stock',{
           sendphonenumber: that.phonenumber,
           orderid: that.orderid,
           sumPhonenumbers: that.sumStockPersons

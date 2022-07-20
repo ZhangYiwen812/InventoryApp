@@ -291,18 +291,18 @@ class VerifController extends Controller
 
         // 建立用户表
         //int 2147483647   unsignedint 4294967295
-        // Schema::create('user', function (Blueprint $table) {
-        //     $table->string('phonenumber',11)->unique();
-        //     $table->string('name',20);
-        //     $table->string('email',320);
-        //     $table->string('password',20);
-        //     $table->string('adminphone',11);
-        //     $table->string('adminkey',5);
-        //     $table->integer('auth')->default(0);
-        //     $table->integer('usersmax')->default(5);
-        //     $table->integer('comsmax')->default(50);
-        //     $table->integer('ordersmax')->default(1);
-        // });
+        Schema::create('user', function (Blueprint $table) {
+            $table->string('phonenumber',11)->unique();
+            $table->string('name',20);
+            $table->string('email',320);
+            $table->string('password',20);
+            $table->string('adminphone',11);
+            $table->string('adminkey',5);
+            $table->integer('auth')->default(0);
+            $table->integer('usersmax')->default(5);
+            $table->integer('comsmax')->default(50);
+            $table->integer('ordersmax')->default(1);
+        });
         $data = [
             [
                 'phonenumber' => '15050500001','name' => '张三',
