@@ -315,11 +315,6 @@ class VerifController extends Controller
                 'adminphone' => '15050572717','adminkey' => '12345'
             ],
             [
-                'phonenumber' => '15050572717','name' => '王五',
-                'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050572717','adminkey' => '23546'
-            ],
-            [
                 'phonenumber' => '15050500003','name' => '二六',
                 'email' => '812901456@qq.com','password' => '12345678',
                 'adminphone' => '15050572717','adminkey' => '78966'
