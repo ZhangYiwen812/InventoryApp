@@ -33,8 +33,8 @@ class UserDBController extends Controller
                 $table->string('adminphone',11);
                 $table->string('adminkey',5);
                 $table->integer('subordernumber')->default(0);
-                $table->integer('auth')->default(0);
-                $table->integer('usersmax')->default(50);
+                $table->integer('auth')->default(2);
+                $table->integer('usersmax')->default(60);
                 $table->integer('comsmax')->default(1000);
                 $table->integer('ordersmax')->default(10);
             });

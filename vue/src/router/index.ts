@@ -6,7 +6,6 @@ import UpdatePassword from '../views/UpdatePassword.vue'
 import Delay from '../views/Delay.vue'
 import Main from '../views/Main.vue'
 
-import Payformember from '../views/user/Payformember.vue'
 import Accountinfo from '../views/user/Accountinfo.vue'
 import Submanagement from '../views/user/Submanagement.vue'
 import Commoditydata from '../views/user/Commoditydata.vue'
@@ -47,15 +46,6 @@ const routes = [
     component: Delay,
     meta:{
       title:"请您稍等"
-    }
-  },
-  {
-    path: '/user/payformember/:phonenumber',
-    name:"Payformember",
-    component:Payformember,
-    props: true,
-    meta:{
-      title:"支付页面"
     }
   },
   {

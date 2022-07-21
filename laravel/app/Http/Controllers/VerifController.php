@@ -213,17 +213,17 @@ class VerifController extends Controller
         return response()->json(['data'=>123]);
     }
 
-    public function getOrderId(){
-        //订单号码主体(YYYYMMDDHHIISSNNNNNNNN)
-        // $order_date = date('Y-m-d');
-        $orderid = date('YmdHis') . rand(100000,999999);
-        $data = Order::find($orderid);
-        if($data!=null){
-            return $this->getOrderId();
-        }else{
-            return $orderid;
-        }
-    }
+    // public function getOrderId(){
+    //     //订单号码主体(YYYYMMDDHHIISSNNNNNNNN)
+    //     // $order_date = date('Y-m-d');
+    //     $orderid = date('YmdHis') . rand(100000,999999);
+    //     $data = Order::find($orderid);
+    //     if($data!=null){
+    //         return $this->getOrderId();
+    //     }else{
+    //         return $orderid;
+    //     }
+    // }
     public function test(Request $request){
         // $data1 = User::where('adminphone','15050500002')->get()->toArray();
         // $data2 = DB::table('user')->where('adminphone','15050500002')->get()->toArray();
@@ -291,103 +291,103 @@ class VerifController extends Controller
 
         // 建立用户表
         //int 2147483647   unsignedint 4294967295
-        Schema::create('user', function (Blueprint $table) {
-            $table->string('phonenumber',11)->unique();
-            $table->string('name',20);
-            $table->string('email',320);
-            $table->string('password',20);
-            $table->string('adminphone',11);
-            $table->string('adminkey',5);
-            $table->integer('auth')->default(0);
-            $table->integer('usersmax')->default(5);
-            $table->integer('comsmax')->default(50);
-            $table->integer('ordersmax')->default(1);
-        });
+        // Schema::create('user', function (Blueprint $table) {
+        //     $table->string('phonenumber',11)->unique();
+        //     $table->string('name',20);
+        //     $table->string('email',320);
+        //     $table->string('password',20);
+        //     $table->string('adminphone',11);
+        //     $table->string('adminkey',5);
+        //     $table->integer('auth')->default(2);
+        //     $table->integer('usersmax')->default(60);
+        //     $table->integer('comsmax')->default(1000);
+        //     $table->integer('ordersmax')->default(10);
+        // });
         $data = [
             [
                 'phonenumber' => '15050500001','name' => '张三',
                 'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050500002','adminkey' => '11202','auth' => 0,
+                'adminphone' => '15050500002','adminkey' => '11202'
             ],
             [
                 'phonenumber' => '15050500002','name' => '李四',
                 'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050572717','adminkey' => '12345','auth' => 0,
+                'adminphone' => '15050572717','adminkey' => '12345'
             ],
             [
                 'phonenumber' => '15050572717','name' => '王五',
                 'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050572717','adminkey' => '23546','auth' => 0,
+                'adminphone' => '15050572717','adminkey' => '23546'
             ],
             [
                 'phonenumber' => '15050500003','name' => '二六',
                 'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050572717','adminkey' => '78966','auth' => 0,
+                'adminphone' => '15050572717','adminkey' => '78966'
             ],
             [
                 'phonenumber' => '15050500004','name' => '小红',
                 'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050572717','adminkey' => '12355','auth' => 0,
+                'adminphone' => '15050572717','adminkey' => '12355'
             ],
             [
                 'phonenumber' => '15050500005','name' => '小张',
                 'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050572717','adminkey' => '98652','auth' => 0,
+                'adminphone' => '15050572717','adminkey' => '98652'
             ],
             [
                 'phonenumber' => '15050500006','name' => '晓霞',
                 'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050572717','adminkey' => '99968','auth' => 0,
+                'adminphone' => '15050572717','adminkey' => '99968'
             ],
             [
                 'phonenumber' => '15050500007','name' => '宁宁',
                 'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050572717','adminkey' => '78889','auth' => 0,
+                'adminphone' => '15050572717','adminkey' => '78889'
             ],
             [
                 'phonenumber' => '15050500008','name' => '小刚',
                 'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050572717','adminkey' => '96583','auth' => 0,
+                'adminphone' => '15050572717','adminkey' => '96583'
             ],
             [
                 'phonenumber' => '15050500009','name' => '甘冈',
                 'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050500001','adminkey' => '23225','auth' => 0,
+                'adminphone' => '15050500001','adminkey' => '23225'
             ],
             [
                 'phonenumber' => '15050500010','name' => '塔基',
                 'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050572717','adminkey' => '45695','auth' => 0,
+                'adminphone' => '15050572717','adminkey' => '45695'
             ],
             [
                 'phonenumber' => '15050500011','name' => '雄安',
                 'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050572717','adminkey' => '99363','auth' => 0,
+                'adminphone' => '15050572717','adminkey' => '99363'
             ],
             [
                 'phonenumber' => '15050500012','name' => '小明',
                 'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050500001','adminkey' => '77458','auth' => 0,
+                'adminphone' => '15050500001','adminkey' => '77458'
             ],
             [
                 'phonenumber' => '15050500013','name' => '小李',
                 'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050572717','adminkey' => '45689','auth' => 0,
+                'adminphone' => '15050572717','adminkey' => '45689'
             ],
             [
                 'phonenumber' => '15050500014','name' => '可可',
                 'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050572717','adminkey' => '32178','auth' => 0,
+                'adminphone' => '15050572717','adminkey' => '32178'
             ],
             [
                 'phonenumber' => '15050500015','name' => '琪琪',
                 'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050572717','adminkey' => '00235','auth' => 0,
+                'adminphone' => '15050572717','adminkey' => '00235'
             ],
             [
                 'phonenumber' => '15050500016','name' => '钉钉',
                 'email' => '812901456@qq.com','password' => '12345678',
-                'adminphone' => '15050572717','adminkey' => '65000','auth' => 0,
+                'adminphone' => '15050572717','adminkey' => '65000'
             ]
         ];
         DB::table('user')->insert($data);

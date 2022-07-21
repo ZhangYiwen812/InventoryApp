@@ -216,7 +216,7 @@ class OrderDBController extends Controller
                     return response()->json(['create'=>2,'whichMemberText'=>$whichMemberText]);
                 }else if($myinfo->auth == 2){
                     // 1-数据超额，最大10个哦！
-                    $whichMemberText='数据超额，最大10个哦！';
+                    $whichMemberText='数据超额，最大'.$myinfo->ordersmax.'个哦！';
                     return response()->json(['create'=>1,'whichMemberText'=>$whichMemberText]);
                 }
             }

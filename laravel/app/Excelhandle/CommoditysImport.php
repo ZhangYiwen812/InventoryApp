@@ -97,7 +97,7 @@ class CommoditysImport implements ToCollection
             }else if($myinfo->auth == 1){
                 $this->request->session()->put('whichMemberText','数据超额，请升级会员！');
             }else if($myinfo->auth == 2){
-                $this->request->session()->put('whichMemberText','数据超额，最大1000个哦！');
+                $this->request->session()->put('whichMemberText','数据超额，最大'.$myinfo->comsmax.'个哦！');
             }
         }
     }

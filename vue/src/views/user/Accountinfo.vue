@@ -19,9 +19,6 @@
         <el-input type="text" disabled="disabled" v-model="adminkey"/>
         <el-button class="editbutton" text="text" v-on:click="refreshKeydialogVisible=true">刷新</el-button>
       </el-form-item>
-      <el-form-item label="会员状态" class="editbox">
-        <el-input type="text" disabled="disabled" v-model="auth"/>
-      </el-form-item>
       <el-form-item label="账号操作">
         <el-button type="danger" v-on:click="toDestroy()">销毁账号</el-button>
         <el-button type="danger" v-on:click="toReset()">初始化账号</el-button>
@@ -69,7 +66,7 @@
     data() {
       return {
         name: '',newname: '',
-        email: '',adminphone: '',adminkey: '',auth: 0,
+        email: '',adminphone: '',adminkey: '',
         dialogmode: true,//true为销毁账号，false为重置账号
         dialogtext: '',
         dialogVisible: false,
@@ -93,11 +90,6 @@
           that.email = response.data.data.email;
           that.adminphone = response.data.data.adminphone;
           that.adminkey = response.data.data.adminkey;
-          switch (response.data.data.auth){
-            case 0 : that.auth = '初级用户';break;
-            case 1 : that.auth = '中级会员';break;
-            case 2 : that.auth = '高级会员';break;
-          }
         }else if(response.data.getdata==0){
           console.log('获取用户数据失败！');
           that.loginfail();

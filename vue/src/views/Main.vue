@@ -7,7 +7,6 @@
           <span>亲爱的 {{name}} 您好！</span>
         </div>
         
-        <el-button class="headbutton" @click="toMember()">成为会员</el-button>
         <el-button class="headbutton" @click="Loginout()">退出登录</el-button>
       </div>
     </el-header>
@@ -151,27 +150,6 @@
             that.loginfail();
           }
         },function(err){console.log('初始化账号错误！');})
-      },
-      /*************************  去往成为会员  *****************************/
-      toMember(){
-        let that = this;
-        axios.post(this.$store.state.url+'/webapi/test',{
-          phonenumber: that.phonenumber
-        }).then(function(response){
-          if(response.data.Logout==1){
-            ElMessage({
-                showClose: true,
-                message: '已添加注册用户',
-                type: 'success',
-            });
-            console.log('已添加注册用户');
-          }else if(response.data.Logout==0){
-            console.log('添加注册用户失败！');
-            that.loginfail();
-          }
-        },function(err){console.log('添加注册用户错误！');})
-
-        this.$router.push("/user/payformember/"+this.phonenumber);
       },
       /***************************  退出登录  ******************************/
       Loginout(){
