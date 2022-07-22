@@ -82,11 +82,7 @@ class OrderDBController extends Controller
                 $summed = $summed && !$complete;
                 $orderid_state = -1;
                 $orderid_statetext = '待处理';
-                // DebugBar::log($waitcount);
-                // DebugBar::log($counting);
-                // DebugBar::log($counted);
-                // DebugBar::log($summed);
-                // DebugBar::log($complete);
+                // DebugBar::log($waitcount);DebugBar::log($counting);DebugBar::log($counted);DebugBar::log($summed);DebugBar::log($complete);
                 if($waitcount){
                     $orderid_state = 0;
                     $orderid_statetext = '等待盘点';
@@ -153,72 +149,74 @@ class OrderDBController extends Controller
         $sendphonenumber=$request->sendphonenumber;
         $myinfo = User::find($sendphonenumber);
         if($request->cookie('phonenumber')==$myinfo->phonenumber && $request->cookie('password')==$myinfo->password){
-            // 获取本用户的订单数量再加一
-            $ordernum = Order::where('sendphonenumber',$sendphonenumber)
-                            ->select('orderid')->distinct()
-                            ->get()->count()+1;
-            // 检查订单的数量上限
-            if($ordernum <= $myinfo->ordersmax){
-                // 订单的数量未超限制
-                $orderid=date('YmdHis').rand(10,99).$sendphonenumber; // 获取订单编号
-                Schema::create('stock'.$orderid, function (Blueprint $table) { // 创建该批次的盘点表
-                    $table->string('id',10);
-                    $table->string('name',30);
-                    $table->biginteger('smallunit_amount')->unsigned()->default(0);;
-                    $table->string('smallunit',1);
-                    $table->string('bigunit',1);
-                    $table->integer('bigtosmall_specs');
-                    $table->string('whosestock',11);
-                    $table->integer('subnumber')->unsigned()->default(0);;
-                });
-                $commoditys = DB::table('commodity'.$sendphonenumber)->get()->toArray();
-                $orderdb = DB::table('order');
-                $orderdbdata = [];
-                $stockdb = DB::table('stock'.$orderid);
-                $stockdbdata = [];
-                $recphonenumbers=$request->recphonenumbers;
-                // 向盘点表和订单表填充数据
-                foreach($recphonenumbers as $recphonenumber){
-                    // 填充该批次某盘点员的盘点数据库
-                    foreach($commoditys as $commodity){
-                        array_push($stockdbdata,[
-                            'id' => $commodity->id,
-                            'name' => $commodity->name,
-                            'smallunit_amount' => 0,
-                            'smallunit' => $commodity->smallunit,
-                            'bigunit' => $commodity->bigunit,
-                            'bigtosmall_specs' => $commodity->bigtosmall_specs,
-                            'whosestock' => $recphonenumber,
-                            'subnumber' => 0  // 商品的提交编号
+            $recphonenumbers=$request->recphonenumbers;
+            // 检查盘点员数量
+            if(count($recphonenumbers)>0){
+                // 获取本用户的订单数量再加一
+                $ordernum = Order::where('sendphonenumber',$sendphonenumber)
+                                ->select('orderid')->distinct()
+                                ->get()->count()+1;
+                // 检查订单的数量上限
+                if($ordernum <= $myinfo->ordersmax){
+                    // 订单的数量未超限制
+                    $orderidhasphone=date('YmdHis').rand(10,99).$sendphonenumber; // 获取订单编号
+                    // 建立盘点信息表(用于存储盘点商品的信息)
+                    $commodityinfos='commodity'.$sendphonenumber;
+                    $stockinfos='stockinfo'.$orderidhasphone;
+                    DB::update("CREATE TABLE {$stockinfos} SELECT * FROM {$commodityinfos}");
+                    // 建立盘点表(用于存储盘点员信息和盘点的商品数量)
+                    Schema::create('stock'.$orderidhasphone, function (Blueprint $table) {
+                        $table->string('id',10);
+                        $table->biginteger('smallunit_amount')->unsigned()->default(0);;
+                        $table->string('whosestock',11);
+                        $table->integer('subnumber')->unsigned()->default(0);;
+                    });
+                    $commoditys = DB::table('commodity'.$sendphonenumber)->get()->toArray();
+                    $orderdb = DB::table('order');
+                    $orderdbdata = [];
+                    $stockdb = DB::table('stock'.$orderidhasphone);
+                    $stockdbdata = [];
+                    // 向盘点表和订单表填充数据
+                    foreach($recphonenumbers as $recphonenumber){
+                        // 填充该批次某盘点员的所有商品的盘点信息
+                        foreach($commoditys as $commodity){
+                            array_push($stockdbdata,[
+                                'id' => $commodity->id,
+                                'smallunit_amount' => 0,
+                                'whosestock' => $recphonenumber,
+                                'subnumber' => 0  // 商品的提交编号
+                            ]);
+                        }
+                        // 在订单表中添加该批次某盘点员的的订单
+                        array_push($orderdbdata,[
+                            'orderid' => $orderidhasphone,
+                            'sendphonenumber' => $sendphonenumber,
+                            'recphonenumber' => $recphonenumber,
+                            'state' => 0,
+                            'subtotal' => 0  // 盘点表提交总数
                         ]);
                     }
-                    // 在订单表中添加该批次某盘点员的的订单
-                    array_push($orderdbdata,[
-                        'orderid' => $orderid,
-                        'sendphonenumber' => $sendphonenumber,
-                        'recphonenumber' => $recphonenumber,
-                        'state' => 0,
-                        'subtotal' => 0  // 盘点表提交总数
-                    ]);
+                    $stockdb->insert($stockdbdata);
+                    $orderdb->insert($orderdbdata);
+                    return response()->json(['create'=>5]); // 5-创建订单成功
+                }else{
+                    // 订单的数量超过限制
+                    if($myinfo->auth == 0){
+                        // 3-数据超额，请开通会员！
+                        $whichMemberText='数据超额，请开通会员！';
+                        return response()->json(['create'=>4,'whichMemberText'=>$whichMemberText]);
+                    }else if($myinfo->auth == 1){
+                        // 2-数据超额，请升级会员！
+                        $whichMemberText='数据超额，请升级会员！';
+                        return response()->json(['create'=>3,'whichMemberText'=>$whichMemberText]);
+                    }else if($myinfo->auth == 2){
+                        // 1-数据超额，最大10个哦！
+                        $whichMemberText='数据超额，最大'.$myinfo->ordersmax.'个哦！';
+                        return response()->json(['create'=>2,'whichMemberText'=>$whichMemberText]);
+                    }
                 }
-                $stockdb->insert($stockdbdata);
-                $orderdb->insert($orderdbdata);
-                return response()->json(['create'=>4]); // 4-创建订单成功
             }else{
-                // 订单的数量超过限制
-                if($myinfo->auth == 0){
-                    // 3-数据超额，请开通会员！
-                    $whichMemberText='数据超额，请开通会员！';
-                    return response()->json(['create'=>3,'whichMemberText'=>$whichMemberText]);
-                }else if($myinfo->auth == 1){
-                    // 2-数据超额，请升级会员！
-                    $whichMemberText='数据超额，请升级会员！';
-                    return response()->json(['create'=>2,'whichMemberText'=>$whichMemberText]);
-                }else if($myinfo->auth == 2){
-                    // 1-数据超额，最大10个哦！
-                    $whichMemberText='数据超额，最大'.$myinfo->ordersmax.'个哦！';
-                    return response()->json(['create'=>1,'whichMemberText'=>$whichMemberText]);
-                }
+                return response()->json(['create'=>1]); // 1-创建订单失败，没有盘点员
             }
         }
         return response()->json(['create'=>0]);
@@ -234,8 +232,11 @@ class OrderDBController extends Controller
                             ->whereIn('state',[0,1,2])->count();
             // 验证所有盘点表是否都是状态3
             if($hasSomeStates==0){
+                // 删除订单
                 $orderiddb=DB::table('order')->where('orderid',$orderidhasphone);
                 $orderiddb->delete();
+                // 删除对应订单的盘点信息表和盘点表
+                Schema::dropIfExists('stockinfo'.$orderidhasphone);
                 Schema::dropIfExists('stock'.$orderidhasphone);
                 return response()->json(['del'=>2]); // 2-所有盘点表都是状态3
             }else{
@@ -250,8 +251,11 @@ class OrderDBController extends Controller
         $orderidhasphone = $request->orderid.$request->phonenumber;
         $myinfo = User::find($request->phonenumber);
         if($request->cookie('phonenumber')==$myinfo->phonenumber && $request->cookie('password')==$myinfo->password){
+            // 删除订单
             $orderiddb=DB::table('order')->where('orderid',$orderidhasphone);
             $orderiddb->delete();
+            // 删除对应订单的盘点信息表和盘点表
+            Schema::dropIfExists('stockinfo'.$orderidhasphone);
             Schema::dropIfExists('stock'.$orderidhasphone);
             return response()->json(['del'=>1]);
         }

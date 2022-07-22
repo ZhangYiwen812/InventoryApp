@@ -187,7 +187,7 @@
           recphonenumbers: that.rightValue,
         }).then(function(response) {
           let create = response.data.create;
-          if(create==4){
+          if(create==5){
             that.rightValue=[];
             ElMessage({
               showClose: true,
@@ -196,13 +196,20 @@
             });
             that.getData();
             console.log('创建订单成功');
-          }else if(create==1 || create==2 || create==3){
+          }else if(create==2 || create==3 || create==4){
             // 数据超额
             let whichMemberText = response.data.whichMemberText;
             console.log(whichMemberText);
             ElMessage({
               showClose: true,
               message: whichMemberText,
+              type: 'error',
+            });
+          }else if(create==1){
+            console.log('抱歉，没有盘点员！');
+            ElMessage({
+              showClose: true,
+              message: '抱歉，没有盘点员！',
               type: 'error',
             });
           }else if(create==0){

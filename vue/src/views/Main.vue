@@ -202,7 +202,7 @@
 }
 .toolbar {
   display: inline-flex;
-  width: 337px;
+  width: 260px;
   height: 60px;
   align-items: center;
 }

@@ -195,19 +195,18 @@ class UserDBController extends Controller
             $users = User::where('adminphone',$request->phonenumber)
                             ->select('phonenumber')
                             ->get()->toArray();
-            DebugBar::log($users);
-            foreach($users as $value){
-                $user = User::find($value['phonenumber']);
-                $user->update(['adminphone' => $value['phonenumber']]);
+            foreach($users as $user){
+                $user = User::find($user['phonenumber']);
+                $user->update(['adminphone' => $user['phonenumber']]);
             }
-            //删除商品数据
+            // 删除商品数据
             Schema::dropIfExists('commodity'.$request->phonenumber);
-            //删除盘点表及盘点订单
+            // 删除盘点信息表、盘点表及盘点订单
             $orderids=DB::table('order')
                         ->select('orderid')
-                        ->orderBy('orderid', 'asc')
                         ->distinct()->get()->toArray();
             foreach($orderids as $orderid){
+                Schema::dropIfExists('stockinfo'.$orderid->orderid);
                 Schema::dropIfExists('stock'.$orderid->orderid);
             }
             $orders=DB::table('order')->where('sendphonenumber',$request->phonenumber);
@@ -230,14 +229,14 @@ class UserDBController extends Controller
                 $user = User::find($value['phonenumber']);
                 $user->update(['adminphone' => $value['phonenumber']]);
             }
-            //删除商品数据
+            // 删除商品数据
             Schema::dropIfExists('commodity'.$request->phonenumber);
-            //删除盘点表及盘点订单
+            // 删除盘点信息表、盘点表及盘点订单
             $orderids=DB::table('order')
                         ->select('orderid')
-                        ->orderBy('orderid', 'asc')
                         ->distinct()->get()->toArray();
             foreach($orderids as $orderid){
+                Schema::dropIfExists('stockinfo'.$orderid->orderid);
                 Schema::dropIfExists('stock'.$orderid->orderid);
             }
             $orders=DB::table('order')->where('sendphonenumber',$request->phonenumber);

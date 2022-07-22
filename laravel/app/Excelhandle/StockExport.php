@@ -29,7 +29,7 @@ class StockExport implements FromCollection,ShouldAutoSize
     public function createData()
     {
         $sendphonenumber = $this->request->sendphonenumber;
-        $orderid = $this->request->orderid.$sendphonenumber;
+        $orderidhasphone = $this->request->orderid.$sendphonenumber;
         $sumPhonenumberdatas = $this->request->sumPhonenumbers;
         // 计算哪些盘点表需要求和
         $sumPhonenumbers = [];
@@ -37,12 +37,12 @@ class StockExport implements FromCollection,ShouldAutoSize
             array_push($sumPhonenumbers,$sumPhonenumberdata['phonenumber']);
         }
         // 构建导出数据
-        $iddataarray = DB::table('stock'.$orderid)
+        $iddataarray = DB::table('stockinfo'.$orderidhasphone)
                     ->select('id','name','smallunit','bigunit','bigtosmall_specs')
-                    ->distinct()->get()->toArray();
+                    ->get()->toArray();
         $data=[['商品编号','商品名称','库存(小单位)','库存(按规格计数)','小单位','大单位','规格']];
         foreach($iddataarray as $iddata){
-            $idsumAmount = DB::table('stock'.$orderid)
+            $idsumAmount = DB::table('stock'.$orderidhasphone)
                         ->where('id',$iddata->id)
                         ->whereIn('whosestock',$sumPhonenumbers)
                         ->sum('smallunit_amount');
@@ -66,7 +66,7 @@ class StockExport implements FromCollection,ShouldAutoSize
         }
         // 更新状态为 盘点完成，已求和
         $iddataarray = DB::table('order')
-                    ->where('orderid',$orderid)
+                    ->where('orderid',$orderidhasphone)
                     ->whereIn('recphonenumber',$sumPhonenumbers)
                     ->update(['state' => 3]);
         return $data;
