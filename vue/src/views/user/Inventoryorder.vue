@@ -206,10 +206,10 @@
               type: 'error',
             });
           }else if(create==1){
-            console.log('抱歉，没有盘点员！');
+            console.log('新建失败，没有盘点人员！');
             ElMessage({
               showClose: true,
-              message: '抱歉，没有盘点员！',
+              message: '新建失败，没有盘点人员！',
               type: 'error',
             });
           }else if(create==0){
